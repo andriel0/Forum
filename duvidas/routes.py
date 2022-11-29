@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, url_for
 from duvidas import app
 from duvidas.forms import FormLogin, FormCriarConta
 

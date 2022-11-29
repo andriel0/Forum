@@ -1,70 +1,81 @@
 {% extends 'base.html' %}
 
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
 {% block body %}
-<div class="container">
-    <h1>Faça aqui o Cadastro de sua Conta</h1>
-    <form method="POST" action="">
-        <legend>Cadastrar Conta</legend>
-        <fieldset>
-            <div class="border border-success p-2 mb-2 border-opacity-25">
-                <div class="row g-3 align-items-center p-1">
-                  <div class="row-auto">
-                    {{ form_criar_conta.user.label }}
-                  </div>
-                  <div class="row-auto mt-1">
-                    {{ form_criar_conta.user }}
-                  </div>
-                  <div class="row-auto mt-0">
-                    <span class="form-text">
-                      Nome de usuário deve ter entre 4-16 caracteres.
-                    </span>
-                  </div>
-                </div>
-                <div class="row g-3 align-items-center p-1">
-                  <div class="row-auto">
-                    {{ form_criar_conta.email.label }}
-                  </div>
-                  <div class="row-auto mt-1">
-                    {{ form_criar_conta.email }}
-                  </div>
-                  <div class="row-auto mt-0">
-                    <span class="form-text">
-                      Digite seu email.
-                    </span>
-                  </div>
-                </div>
-                <div class="row g-3 align-items-center p-1">
-                  <div class="row-auto">
-                    {{ form_criar_conta.senha.label }}
-                  </div>
-                  <div class="row-auto mt-1">
-                    {{ form_criar_conta.senha }}
-                  </div>
-                  <div class="row-auto mt-0">
-                    <span class="form-text">
-                      A senha deve ter entre 6-20 caracteres.
-                    </span>
-                  </div>
-                </div>
-                <div class="row g-3 align-items-center p-1">
-                  <div class="row-auto">
-                    {{ form_criar_conta.conf_senha.label }}
-                  </div>
-                  <div class="row-auto mt-1">
-                    {{ form_criar_conta.conf_senha }}
-                  </div>
-                  <div class="row-auto mt-0 mb-2">
-                    <span class="form-text">
-                      A senha de confirmação deve ser igual a senha acima.
-                    </span>
-                  </div>
-                </div>
-                <button type="submit" class="btn btn-primary btn-lg">
-                    {{ form_criar_conta.btn_submit_cadastro }}
-                </button>
-            </div>
-        </fieldset>
-    </form>
+
+<div class="container text-center">
+    <h1 style="font-size: 70px; text-align: center;" class="mt-5 pt-5">Faça aqui o Cadastro no Fórum</h1>
+    <div class="row mt-5 p-5">
+        <div class="col"></div>
+        <div class="col-8">
+            <div class="col"></div>
+            <form method="POST" action="">
+                <legend style="font-size: 50px; margin-top:60px; margin-bottom: 20px;"><b>Cadastrar Conta</b></legend>
+                <fieldset>
+                    <div style="text-align:left;" class="border border-success p-2 mb-2 border-opacity-25">
+                        <div class="row g-3 align-items-center p-1">
+                          <div style="font-size: 20px;" class="row-auto">
+                            {{ form_criar_conta.user.label(class="form-control-label") }}
+                          </div>
+                          <div class="row-auto mt-1">
+                            {{ form_criar_conta.user(class="form-control") }}
+                          </div>
+                          <div class="row-auto mt-0">
+                            <span class="form-text">
+                              Nome de usuário deve ter entre 4-16 caracteres.
+                            </span>
+                          </div>
+                        </div>
+                        <div class="row g-3 align-items-center p-1">
+                          <div style="font-size: 20px;" class="row-auto">
+                            {{ form_criar_conta.email.label(class="form-control-label") }}
+                          </div>
+                          <div class="row-auto mt-1">
+                            {{ form_criar_conta.email(class="form-control") }}
+                          </div>
+                          <div class="row-auto mt-0">
+                            <span class="form-text">
+                              Digite seu email.
+                            </span>
+                          </div>
+                        </div>
+                        <div style="font-size: 20px;" class="row g-3 align-items-center p-1">
+                          <div class="row-auto">
+                            {{ form_criar_conta.senha.label(class="form-control-label") }}
+                          </div>
+                          <div class="row-auto mt-1">
+                            {{ form_criar_conta.senha(class="form-control") }}
+                          </div>
+                          <div class="row-auto mt-0">
+                            <span class="form-text">
+                              A senha deve ter entre 6-20 caracteres.
+                            </span>
+                          </div>
+                        </div>
+                        <div class="row g-3 align-items-center p-1">
+                          <div style="font-size: 20px;" class="row-auto">
+                            {{ form_criar_conta.conf_senha.label(class="form-control-label") }}
+                          </div>
+                          <div class="row-auto mt-1">
+                            {{ form_criar_conta.conf_senha(class="form-control") }}
+                          </div>
+                          <div class="row-auto mt-0 mb-4">
+                            <span class="form-text">
+                              A senha de confirmação deve ser igual a senha acima.
+                            </span>
+                          </div>
+                        </div>
+                        {{ form_criar_conta.btn_submit_cadastro(class="btn btn-primary", style="font-size: 30px; margin-left: 290px; margin-bottom: 20px; ") }}
+                    </div>
+
+                </fieldset>
+            </form>
+        </div>
+        <div class="col"></div>
+    </div>
 </div>
 
 {% endblock %}
