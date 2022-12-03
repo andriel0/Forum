@@ -8,9 +8,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '379f54d3501c3ce1ef234723724a493a'
 
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///forum_duv.db'
-#
-# database = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///forum_duv.db'
+
+database = SQLAlchemy(app)
 # bcrypt = Bcrypt(app)
 # login_manager = LoginManager(app)
 # login_manager.login_view = 'login'

@@ -10,10 +10,11 @@
     <h1 style="font-size: 70px; text-align: center;" class="mt-5 pt-5">Faça aqui o Cadastro no Fórum</h1>
     <div class="row mt-5 p-5">
         <div class="col"></div>
-        <div class="col-8">
+        <div class="col-8" >
             <div class="col"></div>
             <form method="POST" action="">
-                <legend style="font-size: 50px; margin-top:60px; margin-bottom: 20px;"><b>Cadastrar Conta</b></legend>
+                {{ form_criar_conta.csrf_token }}
+                <legend style="font-size: 50px; margin-top:50px; margin-bottom: 20px;"><b>Cadastrar Conta</b></legend>
                 <fieldset>
                     <div style="text-align:left;" class="border border-success p-2 mb-2 border-opacity-25">
                         <div class="row g-3 align-items-center p-1">
@@ -21,7 +22,17 @@
                             {{ form_criar_conta.user.label(class="form-control-label") }}
                           </div>
                           <div class="row-auto mt-1">
-                            {{ form_criar_conta.user(class="form-control") }}
+                            {{ form_criar_conta.user.label(class="form-control-label") }}
+                              {% if form_criar_conta.user.errors %}
+                                {{ form_criar_conta.user(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for erro in form_criar_conta.user.errors %}
+                                        {{ erro }}
+                                    {% endfor %}
+                                </div>
+                              {% else %}
+                                {{ form_criar_conta.user(class="form-control") }}
+                              {% endif %}
                           </div>
                           <div class="row-auto mt-0">
                             <span class="form-text">
@@ -31,10 +42,19 @@
                         </div>
                         <div class="row g-3 align-items-center p-1">
                           <div style="font-size: 20px;" class="row-auto">
-                            {{ form_criar_conta.email.label(class="form-control-label") }}
+                              {{ form_criar_conta.email.label(class="form-control-label") }}
                           </div>
                           <div class="row-auto mt-1">
-                            {{ form_criar_conta.email(class="form-control") }}
+                              {% if form_criar_conta.email.errors %}
+                                {{ form_criar_conta.email(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for erro in form_criar_conta.email.errors %}
+                                        {{ erro }}
+                                    {% endfor %}
+                                </div>
+                              {% else %}
+                                {{ form_criar_conta.email(class="form-control") }}
+                              {% endif %}
                           </div>
                           <div class="row-auto mt-0">
                             <span class="form-text">
@@ -47,7 +67,16 @@
                             {{ form_criar_conta.senha.label(class="form-control-label") }}
                           </div>
                           <div class="row-auto mt-1">
-                            {{ form_criar_conta.senha(class="form-control") }}
+                              {% if form_criar_conta.senha.errors %}
+                                {{ form_criar_conta.senha(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for erro in form_criar_conta.senha.errors %}
+                                        {{ erro }}
+                                    {% endfor %}
+                                </div>
+                              {% else %}
+                                {{ form_criar_conta.senha(class="form-control") }}
+                              {% endif %}
                           </div>
                           <div class="row-auto mt-0">
                             <span class="form-text">
@@ -60,7 +89,16 @@
                             {{ form_criar_conta.conf_senha.label(class="form-control-label") }}
                           </div>
                           <div class="row-auto mt-1">
-                            {{ form_criar_conta.conf_senha(class="form-control") }}
+                              {% if form_criar_conta.conf_senha.errors %}
+                                {{ form_criar_conta.conf_senha(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for erro in form_criar_conta.conf_senha.errors %}
+                                        {{ erro }}
+                                    {% endfor %}
+                                </div>
+                              {% else %}
+                                {{ form_criar_conta.conf_senha(class="form-control") }}
+                              {% endif %}
                           </div>
                           <div class="row-auto mt-0 mb-4">
                             <span class="form-text">
@@ -68,7 +106,7 @@
                             </span>
                           </div>
                         </div>
-                        {{ form_criar_conta.btn_submit_cadastro(class="btn btn-primary", style="font-size: 30px; margin-left: 290px; margin-bottom: 20px; ") }}
+                        {{ form_criar_conta.btn_submit_cadastro(class="btn btn-primary", style="font-size: 30px; margin-left: 300px; margin-bottom: 20px; ") }}
                     </div>
 
                 </fieldset>
