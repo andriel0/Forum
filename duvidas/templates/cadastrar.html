@@ -8,21 +8,19 @@
 
 <div class="container text-center">
     <h1 style="font-size: 70px; text-align: center;" class="mt-5 pt-5">Faça aqui o Cadastro no Fórum</h1>
-    <div class="row mt-5 p-5">
-        <div class="col"></div>
+    <div class="row mt-4 p-5">
+        <div class="col-2"></div>
         <div class="col-8" >
-            <div class="col"></div>
             <form method="POST" action="">
                 {{ form_criar_conta.csrf_token }}
-                <legend style="font-size: 50px; margin-top:50px; margin-bottom: 20px;"><b>Cadastrar Conta</b></legend>
+                <legend style="font-size: 50px; margin-top:40px; margin-bottom: 20px;"><b>Cadastrar Conta</b></legend>
                 <fieldset>
-                    <div style="text-align:left;" class="border border-success p-2 mb-2 border-opacity-25">
+                    <div style="text-align:left;" class="border border-success p-2 mb-2 pt-3 border-opacity-25">
                         <div class="row g-3 align-items-center p-1">
-                          <div style="font-size: 20px;" class="row-auto">
+                          <div style="font-size: 20px;" class="row-auto pt-2">
                             {{ form_criar_conta.user.label(class="form-control-label") }}
                           </div>
                           <div class="row-auto mt-1">
-                            {{ form_criar_conta.user.label(class="form-control-label") }}
                               {% if form_criar_conta.user.errors %}
                                 {{ form_criar_conta.user(class="form-control is-invalid") }}
                                 <div class="invalid-feedback">
@@ -41,7 +39,7 @@
                           </div>
                         </div>
                         <div class="row g-3 align-items-center p-1">
-                          <div style="font-size: 20px;" class="row-auto">
+                          <div style="font-size: 20px;" class="row-auto pt-2">
                               {{ form_criar_conta.email.label(class="form-control-label") }}
                           </div>
                           <div class="row-auto mt-1">
@@ -63,7 +61,7 @@
                           </div>
                         </div>
                         <div style="font-size: 20px;" class="row g-3 align-items-center p-1">
-                          <div class="row-auto">
+                          <div class="row-auto pt-2">
                             {{ form_criar_conta.senha.label(class="form-control-label") }}
                           </div>
                           <div class="row-auto mt-1">
@@ -79,13 +77,13 @@
                               {% endif %}
                           </div>
                           <div class="row-auto mt-0">
-                            <span class="form-text">
+                            <span class="form-text" style="font-size: 14px;">
                               A senha deve ter entre 6-20 caracteres.
                             </span>
                           </div>
                         </div>
                         <div class="row g-3 align-items-center p-1">
-                          <div style="font-size: 20px;" class="row-auto">
+                          <div style="font-size: 20px;" class="row-auto pt-2">
                             {{ form_criar_conta.conf_senha.label(class="form-control-label") }}
                           </div>
                           <div class="row-auto mt-1">
@@ -102,17 +100,19 @@
                           </div>
                           <div class="row-auto mt-0 mb-4">
                             <span class="form-text">
-                              A senha de confirmação deve ser igual a senha acima.
+                              A senha de confirmação deve ser igual à senha acima.
                             </span>
                           </div>
                         </div>
-                        {{ form_criar_conta.btn_submit_cadastro(class="btn btn-primary", style="font-size: 30px; margin-left: 300px; margin-bottom: 20px; ") }}
+                        <div style="height: 100px; padding-top: 10px;">
+                            {{ form_criar_conta.btn_submit_cadastro(class="btn btn-primary", style="font-size: 30px; margin-left: 300px; margin-bottom: 20px; ") }}
+                        </div>
                     </div>
 
                 </fieldset>
             </form>
         </div>
-        <div class="col"></div>
+        <div class="col-2"></div>
     </div>
 </div>
 
