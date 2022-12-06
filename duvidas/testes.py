@@ -17,8 +17,16 @@ from models import Usuario
 #     usuario = Usuario(user='Andriel', email='andriel@gmail.com', senha='lol1234')
 #     database.session.add(usuario)
 #     database.session.commit()
-#
+
+# Excluir Usuários
+
 # with app.app_context():
-#     user = database.session.query(Usuario).filter_by(user='andriel0').first()
+#     user = database.session.query(Usuario).filter_by(id=1).first()
 #     database.session.delete(user)
+#     database.session.commit()
+
+# Modificar Usuários
+# with app.app_context():
+#     usuario = database.session.query(Usuario).filter_by(id=2).first()
+#     usuario.bio = 'Sou um desenvolvedor Full Stack Júnior.'
 #     database.session.commit()

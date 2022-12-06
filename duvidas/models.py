@@ -16,9 +16,9 @@ class Usuario(database.Model, UserMixin):
     senha = database.Column(database.String, nullable=False)
     foto_perfil = database.Column(database.String, default='default.jpg')
     bio = database.Column(database.Text, default='')
-    posts = database.relationship('duvidas.models.Post', backref='autor', lazy=True)
-    projetos = database.relationship('duvidas.models.Projeto', backref='dono', lazy=True)
-    comentarios = database.relationship('duvidas.models.Comentario', backref='autor', lazy=True)
+    posts_user = database.relationship('duvidas.models.Post', lazy=True, overlaps="posts_user")
+    comentarios_user = database.relationship('duvidas.models.Comentario', lazy=True, overlaps="comentarios_user")
+    projetos_user = database.relationship('duvidas.models.Projeto', lazy=True, overlaps="projetos_user")
 
 
 class Post(database.Model):
@@ -27,8 +27,8 @@ class Post(database.Model):
     titulo = database.Column(database.String, nullable=False)
     corpo = database.Column(database.Text, nullable=False)
     data_criacao = database.Column(database.DateTime, nullable=False, default=datetime.utcnow)
-    id_usuario = database.Column(database.String, database.ForeignKey('usuario.id'), nullable=False)
-    comentarios = database.relationship('duvidas.models.Comentario', backref='autor', lazy=True)
+    id_usuario = database.Column(database.Integer, database.ForeignKey('usuario.id'), nullable=False)
+    comentarios_post = database.relationship('duvidas.models.Comentario', lazy=True, overlaps="comentarios_post")
 
 
 class Comentario(database.Model):
@@ -36,8 +36,8 @@ class Comentario(database.Model):
     id = database.Column(database.Integer, primary_key=True)
     corpo = database.Column(database.Text, nullable=False)
     data_criacao = database.Column(database.DateTime, nullable=False, default=datetime.utcnow)
-    id_usuario = database.Column(database.String, database.ForeignKey('usuario.id'), nullable=False)
-    id_post = database.Column(database.String, database.ForeignKey('post.id'), nullable=False)
+    id_usuario = database.Column(database.Integer, database.ForeignKey('usuario.id'), nullable=False)
+    id_post = database.Column(database.Integer, database.ForeignKey('post.id'), nullable=False)
 
 
 class Projeto(database.Model):
@@ -45,4 +45,4 @@ class Projeto(database.Model):
     id = database.Column(database.Integer, primary_key=True)
     nome = database.Column(database.String, nullable=False)
     explicacao = database.Column(database.Text, nullable=False)
-    id_usuario = database.Column(database.String, database.ForeignKey('usuario.id'), nullable=False)
+    id_usuario = database.Column(database.Integer, database.ForeignKey('usuario.id'), nullable=False)
