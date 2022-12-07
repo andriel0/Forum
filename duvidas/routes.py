@@ -61,13 +61,6 @@ def sair():
     return redirect(url_for('homepage'))
 
 
-@app.route("/meuperfil")
-@login_required
-def meuperfil():
-    foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))
-    return render_template('meuperfil.html', foto_perfil=foto_perfil)
-
-
 def salvar_imagem(imagem):
     # criptografando e colocando na pasta
     codigo = secrets.token_hex(8)
@@ -83,6 +76,19 @@ def salvar_imagem(imagem):
     # salvando a foto reduzida
     imagem_reduzida.save(caminho_completo)
     return nome_arquivo
+
+
+@app.route("/meuperfil", methods=['GET', 'POST'])
+@login_required
+def meuperfil():
+    form_editar_perfil = FormEditarPerfil()
+    if form_editar_perfil.foto_perfil.data:
+        with app.app_context():
+            imagem = salvar_imagem(form_editar_perfil.foto_perfil.data)
+            current_user.foto_perfil = imagem
+            database.session.commit()
+    foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))
+    return render_template('meuperfil.html', foto_perfil=foto_perfil, form_editar_perfil=form_editar_perfil)
 
 
 @app.route("/editarperfil", methods=['GET', 'POST'])

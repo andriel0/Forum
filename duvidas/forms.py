@@ -44,5 +44,6 @@ class FormEditarPerfil(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     senha = PasswordField('Senha', validators=[DataRequired(), Length(6, 20)])
     conf_senha = PasswordField('Confirmação de Senha', validators=[EqualTo('senha')])
+    bio = TextAreaField('Bio', validators=[Length(3,100)])
     foto_perfil = FileField('Atualizar foto de perfil', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     btn_submit_editar = SubmitField('Editar Perfil')
