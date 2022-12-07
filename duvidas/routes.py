@@ -103,6 +103,7 @@ def editar_perfil():
                 imagem = salvar_imagem(form_editar_perfil.foto_perfil.data)
                 current_user.foto_perfil = imagem
             database.session.commit()
+            print(form_editar_perfil.foto_perfil.data)
             return redirect(url_for('meuperfil'))
             # senha_cripto = bcrypt.generate_password_hash(form_editar_perfil.senha.data).decode('utf8')
             # usuario = Usuario(id=current_user.id, user=form_editar_perfil.user.data, email=form_editar_perfil.email.data,

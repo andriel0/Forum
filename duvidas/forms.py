@@ -47,3 +47,15 @@ class FormEditarPerfil(FlaskForm):
     bio = TextAreaField('Bio', validators=[Length(3,100)])
     foto_perfil = FileField('Atualizar foto de perfil', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     btn_submit_editar = SubmitField('Editar Perfil')
+
+    def validate_email(self, email):
+        if current_user.email != email.data:
+            usuario = Usuario.query.filter_by(email=email.data).first()
+            if usuario:
+                raise ValidationError('Já existe outro usuário com esse email, altere com outro email.')
+
+    def validate_user(self, user):
+        if current_user.user != user.data:
+            usuario = Usuario.query.filter_by(user=user.data).first()
+            if usuario:
+                raise ValidationError('Nome de usuário existente, altere com outro nome de usuário.')

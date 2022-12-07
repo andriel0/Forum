@@ -10,8 +10,9 @@
         <div class="row">
             <div class="col-6">
                 <div class="card p-3 py-4" style="width: 600px; height: 700px;">
-                    <div class="text-center">
-                        <img src="{{ foto_perfil }}" width="100" class="rounded-circle">
+                    <img src="{{ foto_perfil }}" width="200" class="rounded-circle ms-5 ps-2">
+                    <div class="text-center pt-2">
+                        {{ form_editar_perfil.foto_perfil(style="margin-right: 50px; margin-bottom: 20px;") }}
                         <h3 class="mt-2">{{ current_user.user }}</h3>
                         <div class="row mt-3 mb-3">
                           <div class="col-md-4">
@@ -28,9 +29,9 @@
                           </div>
                         </div>
                         <hr class="line">
-                        <small class="mt-4">{{ current_user.bio }}</small>
+                        <h5 class="mt-4 mb-5">{{ current_user.bio }}</h5>
                         <div class="profile mt-5">
-                            <a href="{{ url_for('meuperfil') }}"><button class="profile_button px-5">Ver Perfil</button></a>
+                            <a href="{{ url_for('meuperfil') }}"><button class="profile_button px-5 mt-5">Ver Perfil</button></a>
                         </div>
                     </div>
                 </div>
@@ -89,20 +90,10 @@
                                             </span>
                                           </div>
                                         </div>
-                                        <div class="form-group">
-                                            {{ form_editar_perfil.foto_perfil.label }}
-                                            {{ form_editar_perfil.foto_perfil(class="form-control-file") }}
-                                            {% if foto_perfil.errors %}
-                                                {% for erro in form_editar_perfil.foto_perfil.errors %}
-                                                    <span class="text-danger">{{ erro }}</span><br>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                        <div style="height: 100px; padding-top: 10px;">
-                                            {{ form_editar_perfil.btn_submit_editar(class="btn btn-primary", style="font-size: 30px; margin-left: 300px; margin-bottom: 20px; ") }}
+                                        <div class="container d-flex justify-content-center" style="height: 80px; padding-top: 10px;">
+                                            {{ form_editar_perfil.btn_submit_editar(class="profile_button", style="font-size: 17px; margin-top: 20px; width: 150px; height: 45px;") }}
                                         </div>
                                     </div>
-
                                 </fieldset>
                             </form>
                         </div>
