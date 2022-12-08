@@ -9,7 +9,6 @@ from flask_wtf.file import FileField, FileAllowed
 from PIL import Image
 
 
-
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
     form_criar_post = FormCriarPost()
@@ -78,7 +77,7 @@ def salvar_imagem(imagem):
     return nome_arquivo
 
 
-@app.route("/meuperfil", methods=['GET', 'POST'])
+@app.route("/perfil", methods=['GET', 'POST'])
 @login_required
 def meuperfil():
     form_editar_perfil = FormEditarPerfil()
@@ -87,31 +86,34 @@ def meuperfil():
             imagem = salvar_imagem(form_editar_perfil.foto_perfil.data)
             current_user.foto_perfil = imagem
             database.session.commit()
+            return redirect(url_for('meuperfil'))
     foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))
     return render_template('meuperfil.html', foto_perfil=foto_perfil, form_editar_perfil=form_editar_perfil)
 
 
-@app.route("/editarperfil", methods=['GET', 'POST'])
+@app.route("/perfil/editar", methods=['GET', 'POST'])
 @login_required
 def editar_perfil():
     form_editar_perfil = FormEditarPerfil()
-    if form_editar_perfil.validate_on_submit():
-        with app.app_context():
-            current_user.user = form_editar_perfil.user.data
-            current_user.email = form_editar_perfil.email.data
-            if form_editar_perfil.foto_perfil.data:
-                imagem = salvar_imagem(form_editar_perfil.foto_perfil.data)
-                current_user.foto_perfil = imagem
-            database.session.commit()
-            print(form_editar_perfil.foto_perfil.data)
-            return redirect(url_for('meuperfil'))
-            # senha_cripto = bcrypt.generate_password_hash(form_editar_perfil.senha.data).decode('utf8')
-            # usuario = Usuario(id=current_user.id, user=form_editar_perfil.user.data, email=form_editar_perfil.email.data,
-            #               senha=senha_cripto)
-            # return redirect(url_for('meuperfil'))
+    if form_editar_perfil.senha.data and not 5 < len(form_editar_perfil.senha.data) < 21:
+        form_editar_perfil.senha.errors = list(form_editar_perfil.senha.errors)
+        form_editar_perfil.senha.errors.append(ValueError("A senha deve ter entre 6-20 caracteres."))
+    elif form_editar_perfil.validate_on_submit():
+        current_user.email = form_editar_perfil.email.data
+        current_user.user = form_editar_perfil.user.data
+        current_user.bio = form_editar_perfil.bio.data
+        if form_editar_perfil.foto_perfil.data:
+            imagem = salvar_imagem(form_editar_perfil.foto_perfil.data)
+            current_user.foto_perfil = imagem
+        if form_editar_perfil.senha.data and not(bcrypt.check_password_hash(current_user.senha, form_editar_perfil.senha.data)):
+            senha_cripto = bcrypt.generate_password_hash(form_editar_perfil.senha.data).decode('utf8')
+            current_user.senha = senha_cripto
+        database.session.commit()
+        return redirect(url_for('meuperfil'))
     elif request.method == 'GET':
-        form_editar_perfil.user.data = current_user.user
         form_editar_perfil.email.data = current_user.email
+        form_editar_perfil.user.data = current_user.user
+        form_editar_perfil.bio.data = current_user.bio
     foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))
     return render_template('editarperfil.html', foto_perfil=foto_perfil, form_editar_perfil=form_editar_perfil)
 

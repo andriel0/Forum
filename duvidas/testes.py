@@ -30,3 +30,7 @@ from models import Usuario
 #     usuario = database.session.query(Usuario).filter_by(id=2).first()
 #     usuario.bio = 'Sou um desenvolvedor Full Stack Júnior.'
 #     database.session.commit()
+
+# with app.app_context():
+#     usu = database.session.query(Usuario).filter_by(id=2).first()
+#     print(usu.user)
