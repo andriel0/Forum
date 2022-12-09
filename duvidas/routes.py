@@ -5,20 +5,21 @@ from duvidas import app, database, bcrypt
 from duvidas.forms import FormLogin, FormCriarConta, FormCriarPost, FormEditarPerfil
 from duvidas.models import Usuario, Post, Comentario, Projeto
 from flask_login import login_user, logout_user, login_required, current_user
-from flask_wtf.file import FileField, FileAllowed
 from PIL import Image
 
 
 @app.route("/", methods=['GET', 'POST'])
 def homepage():
     form_criar_post = FormCriarPost()
+    posts = Post.query.order_by(Post.id.desc())
+    # usuario = database.session.query(Usuario).filter_by(id=post_id).first()
     if form_criar_post.validate_on_submit():
         with app.app_context():
             post = Post(titulo=form_criar_post.titulo.data, corpo=form_criar_post.corpo.data, id_usuario=current_user.id)
             database.session.add(post)
             database.session.commit()
             return redirect(url_for('homepage'))
-    return render_template('homepage.html', form_criar_post=form_criar_post)
+    return render_template('homepage.html', form_criar_post=form_criar_post, posts=posts)
 
 
 @app.route("/cadastrar", methods=['GET', 'POST'])
@@ -31,7 +32,7 @@ def cadastrar():
             database.session.add(usuario)
             database.session.commit()
             flash(f'Conta criada com sucesso no e-mail {form_criar_conta.email.data}', 'alert-success')
-            return redirect(url_for('homepage'))
+            return redirect(url_for('logar'))
     return render_template('cadastrar.html', form_criar_conta=form_criar_conta)
 
 

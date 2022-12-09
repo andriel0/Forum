@@ -16,7 +16,7 @@ class Usuario(database.Model, UserMixin):
     senha = database.Column(database.String, nullable=False)
     foto_perfil = database.Column(database.String, default='default.jpg', nullable=False)
     bio = database.Column(database.Text, default='', nullable=False)
-    posts_user = database.relationship('duvidas.models.Post', lazy=True, overlaps="posts_user")
+    posts_user = database.relationship('Post', backref='autor', lazy=True)
     comentarios_user = database.relationship('duvidas.models.Comentario', lazy=True, overlaps="comentarios_user")
     projetos_user = database.relationship('duvidas.models.Projeto', lazy=True, overlaps="projetos_user")
 
