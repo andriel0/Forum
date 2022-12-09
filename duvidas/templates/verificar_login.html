@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="card p-3 py-4" style="width: 650px; height: 800px;">
+    <div class="row mt-5">
+        <form method="POST" action="" enctype="multipart/form-data">
+        {{ form_verificar.csrf_token }}
+        <fieldset>
+            <div style="text-align:left;">
+                <div class="row g-3 align-items-center p-1">
+                  <div style="font-size: 20px;" class="row-auto pt-0">
+                    {{ form_verificar.codigo.label(class="form-control-label") }}
+                  </div>
+                    {% if form_verificar.codigo.errors %}
+                        {{ form_verificar.codigo(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for erro in form_verificar.codigo.errors %}
+                                {{ erro }}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form_verificar.codigo(class="form-control m-1") }}
+                    {% endif %}
+                <div class="container d-flex justify-content-center" style="height: 80px; padding-top: 10px;">
+                    {{ form_verificar.btn_submit_verificar(class="profile_button", style="font-size: 17px; margin-top: 20px; width: 150px; height: 45px;") }}
+                </div>
+            </div>
+            </div>
+        </fieldset>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

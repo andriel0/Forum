@@ -2,7 +2,7 @@ import os
 import secrets
 from flask import render_template, url_for, request, flash, redirect
 from duvidas import app, database, bcrypt
-from duvidas.forms import FormLogin, FormCriarConta, FormCriarPost, FormEditarPerfil
+from duvidas.forms import FormLogin, FormCriarConta, FormCriarPost, FormEditarPerfil, FormVerificar
 from duvidas.models import Usuario, Post, Comentario, Projeto
 from flask_login import login_user, logout_user, login_required, current_user
 from PIL import Image
@@ -36,6 +36,23 @@ def cadastrar():
     return render_template('cadastrar.html', form_criar_conta=form_criar_conta)
 
 
+@app.route("/logar/verificar", methods=['GET', 'POST'])
+def verificar_login():
+    form_verificar = FormVerificar()
+    codigo = secrets.token_hex(3).upper()
+    print(codigo)
+    if form_verificar.validate_on_submit():
+        print(codigo)
+        print(form_verificar.codigo.data)
+        if form_verificar.codigo.data == codigo:
+            query_next = request.args.get('next')
+            if query_next:
+                return redirect(query_next)
+            else:
+                return redirect(url_for('homepage'))
+    return render_template('verificar_login.html', form_verificar=form_verificar)
+
+
 @app.route("/logar", methods=['GET', 'POST'])
 def logar():
     form_login = FormLogin()
@@ -48,7 +65,7 @@ def logar():
             if query_next:
                 return redirect(query_next)
             else:
-                return redirect(url_for('homepage'))
+                return redirect(url_for('verificar_login'))
         else:
             flash(f'Email ou senha incorretos', 'alert-danger')
     return render_template('logar.html', form_login=form_login)

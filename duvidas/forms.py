@@ -31,6 +31,11 @@ class FormLogin(FlaskForm):
     btn_submit_login = SubmitField('Fazer Login')
 
 
+class FormVerificar(FlaskForm):
+    codigo = StringField('Código de Verificação', validators=[Length(6, 6)])
+    btn_submit_verificar = SubmitField('Verificar')
+
+
 class FormCriarPost(FlaskForm):
     titulo = StringField('Título da Dúvida', validators=[DataRequired(), Length(3, 140)])
     corpo = TextAreaField('Escreva sua dúvida aqui', validators=[DataRequired()])
