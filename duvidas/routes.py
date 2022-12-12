@@ -12,7 +12,6 @@ from PIL import Image
 def homepage():
     form_criar_post = FormCriarPost()
     posts = Post.query.order_by(Post.id.desc())
-    # usuario = database.session.query(Usuario).filter_by(id=post_id).first()
     if form_criar_post.validate_on_submit():
         with app.app_context():
             post = Post(titulo=form_criar_post.titulo.data, corpo=form_criar_post.corpo.data, id_usuario=current_user.id)
@@ -36,39 +35,47 @@ def cadastrar():
     return render_template('cadastrar.html', form_criar_conta=form_criar_conta)
 
 
+def gerar_codigo():
+    codigo = secrets.token_hex(3)
+    print(codigo)
+    return codigo
+
+
 @app.route("/logar/verificar", methods=['GET', 'POST'])
 def verificar_login():
     form_verificar = FormVerificar()
-    codigo = secrets.token_hex(3).upper()
-    print(codigo)
-    if form_verificar.validate_on_submit():
-        print(codigo)
-        print(form_verificar.codigo.data)
-        if form_verificar.codigo.data == codigo:
-            query_next = request.args.get('next')
-            if query_next:
-                return redirect(query_next)
-            else:
-                return redirect(url_for('homepage'))
-    return render_template('verificar_login.html', form_verificar=form_verificar)
+    form_login = FormLogin()
+    usuario = current_user
+    logout_user()
+    # if request.method == 'GET':
+    #     codigo = gerar_codigo()
+    #
+    # elif form_verificar.validate_on_submit() and form_verificar.codigo.data == codigo:
+
+    return render_template('logar.html', form_login=form_login, form_verificar=form_verificar, usuario=usuario)
 
 
 @app.route("/logar", methods=['GET', 'POST'])
 def logar():
     form_login = FormLogin()
+    form_verificar = FormVerificar()
+    codigo = gerar_codigo()
     if form_login.validate_on_submit():
         usuario = Usuario.query.filter_by(email=form_login.email.data).first()
         if usuario and bcrypt.check_password_hash(usuario.senha, form_login.senha.data):
             login_user(usuario, form_login.check_lembrar.data)
             flash(f'Login feito com sucesso no e-mail {form_login.email.data}', 'alert-success')
-            query_next = request.args.get('next')
-            if query_next:
-                return redirect(query_next)
-            else:
-                return redirect(url_for('verificar_login'))
+            return redirect(url_for('verificar_login'))
+            # query_next = request.args.get('next')
+            # if query_next:
+            #     return redirect(query_next)
+            # else:
+            #     return redirect(url_for('verificar_login'))
+
         else:
-            flash(f'Email ou senha incorretos', 'alert-danger')
-    return render_template('logar.html', form_login=form_login)
+            raise ValueError('Email ou senha incorretos')
+
+    return render_template('logar.html', form_login=form_login, form_verificar=form_verificar, codigo=codigo)
 
 
 @app.route("/sair")
@@ -95,23 +102,25 @@ def salvar_imagem(imagem):
     return nome_arquivo
 
 
-@app.route("/perfil", methods=['GET', 'POST'])
+@app.route("/perfil/<usuario>", methods=['GET', 'POST'])
 @login_required
-def meuperfil():
+def perfil(usuario):
+    usuario_perfil = database.session.query(Usuario).filter_by(user=usuario).first()
     form_editar_perfil = FormEditarPerfil()
     if form_editar_perfil.foto_perfil.data:
         with app.app_context():
             imagem = salvar_imagem(form_editar_perfil.foto_perfil.data)
-            current_user.foto_perfil = imagem
+            usuario_perfil.foto_perfil = imagem
             database.session.commit()
-            return redirect(url_for('meuperfil'))
-    foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.foto_perfil))
-    return render_template('meuperfil.html', foto_perfil=foto_perfil, form_editar_perfil=form_editar_perfil)
+            return redirect(url_for('perfil', usuario=usuario))
+    foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(usuario_perfil.foto_perfil))
+    return render_template('perfil.html', foto_perfil=foto_perfil, form_editar_perfil=form_editar_perfil,
+                           usuario=usuario_perfil)
 
 
-@app.route("/perfil/editar", methods=['GET', 'POST'])
+@app.route("/perfil/<usuario>/editar", methods=['GET', 'POST'])
 @login_required
-def editar_perfil():
+def editar_perfil(usuario):
     form_editar_perfil = FormEditarPerfil()
     if form_editar_perfil.senha.data and not 5 < len(form_editar_perfil.senha.data) < 21:
         form_editar_perfil.senha.errors = list(form_editar_perfil.senha.errors)
@@ -120,14 +129,10 @@ def editar_perfil():
         current_user.email = form_editar_perfil.email.data
         current_user.user = form_editar_perfil.user.data
         current_user.bio = form_editar_perfil.bio.data
-        if form_editar_perfil.foto_perfil.data:
-            imagem = salvar_imagem(form_editar_perfil.foto_perfil.data)
-            current_user.foto_perfil = imagem
         if form_editar_perfil.senha.data and not(bcrypt.check_password_hash(current_user.senha, form_editar_perfil.senha.data)):
             senha_cripto = bcrypt.generate_password_hash(form_editar_perfil.senha.data).decode('utf8')
             current_user.senha = senha_cripto
         database.session.commit()
-        return redirect(url_for('meuperfil'))
     elif request.method == 'GET':
         form_editar_perfil.email.data = current_user.email
         form_editar_perfil.user.data = current_user.user

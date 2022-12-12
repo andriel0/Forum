@@ -30,7 +30,7 @@
                         <hr class="line">
                         <h5 class="mt-4 mb-5">{{ current_user.bio }}</h5>
                         <div class="profile mt-5">
-                            <a href="{{ url_for('meuperfil') }}"><button class="profile_button px-5 mt-5">Ver Perfil</button></a>
+                            <a href="{{ url_for('perfil', usuario=current_user.user) }}"><button class="profile_button px-5 mt-5">Ver Perfil</button></a>
                         </div>
                     </div>
                 </div>

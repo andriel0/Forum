@@ -52,9 +52,9 @@
         <div class="row border mt-4 p-3 meupost">
             <div class="col col-2">
                 <div class="image pe-2">
-                    <img src="{{ url_for('static', filename='fotos_perfil/{}'.format(post.autor.foto_perfil)) }}">
+                    <a href="{{ url_for('perfil', usuario=post.autor.user) }}"><img src="{{ url_for('static', filename='fotos_perfil/{}'.format(post.autor.foto_perfil)) }}"></a>
                     <br>
-                    <strong>{{ post.autor.user }}</strong>
+                    <a href="{{ url_for('perfil', usuario=post.autor.user) }}"><strong>{{ post.autor.user }}</strong></a>
                 </div>
             </div>
             <div class="col col-10">
