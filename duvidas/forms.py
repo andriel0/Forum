@@ -24,15 +24,11 @@ class FormCriarConta(FlaskForm):
             raise ValidationError('Nome de usuário existente, cadastre outro nome de usuário.')
 
 
-class FormLoginEmail(FlaskForm):
-    email = StringField('Email', validators=[Email()])
-    btn_submit_email = SubmitField('Próxima')
-
-
-class FormLoginSenha(FlaskForm):
+class FormLogin(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
     senha = PasswordField('Senha', validators=[DataRequired(), Length(6, 20)])
     check_lembrar = BooleanField('Lembrar dados')
-    btn_submit_senha = SubmitField('Próxima')
+    btn_submit_login = SubmitField('Fazer Login')
 
 
 class FormVerificar(FlaskForm):

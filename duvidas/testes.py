@@ -4,8 +4,8 @@ from models import Usuario
 
 # Criar database e tabelas
 
-# with app.app_context():
-#     database.create_all()
+with app.app_context():
+    database.create_all()
 
 # Excluindo tabelas
 # with app.app_context():

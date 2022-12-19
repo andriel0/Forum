@@ -1,6 +1,7 @@
 from duvidas import database, login_manager
 from datetime import datetime
 from flask_login import UserMixin
+import secrets
 
 
 @login_manager.user_loader
@@ -15,10 +16,16 @@ class Usuario(database.Model, UserMixin):
     email = database.Column(database.String, nullable=False, unique=True)
     senha = database.Column(database.String, nullable=False)
     foto_perfil = database.Column(database.String, default='default.jpg', nullable=False)
+    code = database.Column(database.String, default='')
     bio = database.Column(database.Text, default='', nullable=False)
     posts_user = database.relationship('Post', backref='autor', lazy=True)
     comentarios_user = database.relationship('duvidas.models.Comentario', lazy=True, overlaps="comentarios_user")
     projetos_user = database.relationship('duvidas.models.Projeto', lazy=True, overlaps="projetos_user")
+
+
+    def get_code(self):
+        self.code = secrets.token_hex(3)
+
 
 
 class Post(database.Model):

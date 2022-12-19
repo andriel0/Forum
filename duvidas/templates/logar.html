@@ -38,7 +38,6 @@
                             </span>
                           </div>
                         </div>
-                        {% if not usuario%}
                         <div style="font-size: 20px;" class="row g-3 align-items-center p-1 pt-2">
                           <div class="row-auto">
                             {{ form_login.senha.label(class="form-control-label") }}
@@ -65,9 +64,28 @@
                               {{ form_login.check_lembrar }}
                           </div>
                         </div>
-                        {% endif %}
                         {% if usuario %}
-                            <a href="{{ url_for('verificar_login', codigo=codigo, lembrar=lembrar, usuario=usuario) }}"><button id="botao" class="btn btn-primary">Verificação</button></a>
+                            <form method="POST" action="" enctype="multipart/form-data">
+                                {{ form_verificar.csrf_token }}
+                                <div class="row g-3 align-items-center p-1">
+                                  <div style="font-size: 20px;" class="row-auto pt-0">
+                                    {{ form_verificar.codigo.label(class="form-control-label") }}
+                                  </div>
+                                    {% if form_verificar.codigo.errors %}
+                                        {{ form_verificar.codigo(class="form-control is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for erro in form_verificar.codigo.errors %}
+                                                {{ erro }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form_verificar.codigo(class="form-control m-1") }}
+                                    {% endif %}
+                                <div class="container d-flex justify-content-center" style="height: 80px; padding-top: 10px;">
+                                    {{ form_verificar.btn_submit_verificar(class="profile_button", style="font-size: 17px; margin-top: 20px; width: 150px; height: 45px;") }}
+                                </div>
+                                </div>
+                            </form>
                         {% else %}
                             <div style="height: 100px; margin-top: 15px; padding-top: 10px; padding-left: 360px;">
                                 {{ form_login.btn_submit_login(class="btn btn-primary", style="font-size: 30px; width: 180px;") }}

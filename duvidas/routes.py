@@ -2,7 +2,7 @@ import os
 import secrets
 from flask import render_template, url_for, request, flash, redirect
 from duvidas import app, database, bcrypt
-from duvidas.forms import FormLoginEmail, FormLoginSenha, FormCriarConta, FormCriarPost, FormEditarPerfil, FormVerificar
+from duvidas.forms import FormLogin, FormCriarConta, FormCriarPost, FormEditarPerfil, FormVerificar
 from duvidas.models import Usuario, Post, Comentario, Projeto
 from flask_login import login_user, logout_user, login_required, current_user
 from PIL import Image
@@ -35,64 +35,41 @@ def cadastrar():
     return render_template('cadastrar.html', form_criar_conta=form_criar_conta)
 
 
-@app.route("/login_email", methods=['GET', 'POST'])
-def logar_email():
-    form = FormLoginEmail()
-    if form.validate_on_submit():
-        usuario = Usuario.query.filter_by(email=form.email.data).first()
-        if usuario:
-            return redirect(url_for('logar_senha', usuario=usuario))
-    return render_template('login_email.html', form=form)
-
-
-def gerar_codigo():
-    codigo = secrets.token_hex(3).upper()
-    print(codigo)
-    return codigo
-
-
-@app.route("/login_senha/<usuario>", methods=['GET', 'POST'])
-def logar_senha(usuario):
-    form = FormLoginSenha()
-    print(usuario)
-    if form.validate_on_submit() and bcrypt.check_password_hash(usuario.senha, form.senha.data):
-        codigo = gerar_codigo()
-        print(codigo)
-        return verificar_login(codigo, usuario, form.check_lembrar.data)
-    return render_template('login_senha.html', form=form)
-
-
-@app.route("/logar/verificar", methods=['GET', 'POST'])
-def verificar_login(codigo, usuario, lembrar):
+@app.route("/logar/verificar/<query_next>", methods=['GET', 'POST'])
+def verificar_login(query_next):
     form_verificar = FormVerificar()
-    if form_verificar.validate_on_submit() and form_verificar.codigo.data == codigo:
-        login_user(usuario, lembrar)
-        return redirect(url_for('homepage'))
-    return render_template('logar.html', form_verificar=form_verificar, usuario=usuario)
+    form_login = FormLogin()
+    usuario = current_user
+    logout_user()
+    if form_verificar.validate_on_submit() and form_verificar.codigo.data == usuario:
+        login_user(usuario)
+        if query_next != 'no':
+            return redirect(query_next)
+        else:
+            return redirect(url_for('homepage'))
+    return render_template('logar.html', form_login=form_login, form_verificar=form_verificar, usuario=usuario)
 
 
-# @app.route("/logar", methods=['GET', 'POST'])
-# def logar():
-#     form_login = FormLogin()
-#     if form_login.validate_on_submit():
-#         usuario = Usuario.query.filter_by(email=form_login.email.data).first()
-#         if usuario and bcrypt.check_password_hash(usuario.senha, form_login.senha.data):
-#             codigo = gerar_codigo()
-#             form_verificar = FormVerificar()
-#             flash(f'Login feito com sucesso no e-mail {form_login.email.data}', 'alert-success')
-#             return render_template('logar.html', form_login=form_login, form_verificar=form_verificar, codigo=codigo,
-#                                    lembrar=form_login.check_lembrar.data, usuario=usuario)
-#             # return redirect(url_for('verificar_login'))
-#             # query_next = request.args.get('next')
-#             # if query_next:
-#             #     return redirect(query_next)
-#             # else:
-#             #     return redirect(url_for('verificar_login'))
-#
-#         else:
-#             raise ValueError('Email ou senha incorretos')
-#
-#     return render_template('logar.html', form_login=form_login)
+@app.route("/logar", methods=['GET', 'POST'])
+def logar():
+    form_login = FormLogin()
+    form_verificar = FormVerificar()
+    if form_login.validate_on_submit():
+        usuario = Usuario.query.filter_by(email=form_login.email.data).first()
+        if usuario and bcrypt.check_password_hash(usuario.senha, form_login.senha.data):
+            usuario.get_code()
+            print(usuario.code)
+            login_user(usuario, form_login.check_lembrar.data)
+            flash(f'Login feito com sucesso no e-mail {form_login.email.data}', 'alert-success')
+            query_next = request.args.get('next')
+            if query_next:
+                return redirect(url_for('verificar_login', query_next=query_next))
+            return redirect(url_for('verificar_login', query_next='no'))
+
+        else:
+            raise ValueError('Email ou senha incorretos')
+
+    return render_template('logar.html', form_login=form_login, form_verificar=form_verificar)
 
 
 @app.route("/sair")
