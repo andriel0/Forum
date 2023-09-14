@@ -5,7 +5,7 @@ from flask_login import LoginManager
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = '379f54d3501c3ce1ef234723724a493a'
+app.config['SECRET_KEY'] = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///forum_duv.db'
